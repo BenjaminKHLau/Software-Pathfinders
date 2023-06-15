@@ -41,5 +41,8 @@ func SignUp(c *gin.Context) {
 		return
 	}
 	// Respond
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{
+		"email":    body.Email,
+		"password": hash,
+	})
 }
