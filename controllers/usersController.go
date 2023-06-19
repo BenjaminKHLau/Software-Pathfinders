@@ -46,9 +46,27 @@ func SignUp(c *gin.Context) {
 		})
 		return
 	}
+
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["email"] = user.Email
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+	tokenString, err := token.SignedString(jwtSecret)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to generate token",
+		})
+		return
+	}
+
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+
 	// Respond
 	c.JSON(http.StatusOK, gin.H{
 		"email": body.Email,
+		"token": tokenString,
 		// "password": hash,
 	})
 }
@@ -101,10 +119,33 @@ func Login(c *gin.Context) {
 		return
 	}
 	// fmt.Println(os.Getenv("SECRET_KEY"))
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
 
 	// Respond with the JWT token
 	c.JSON(http.StatusOK, gin.H{
 		"email": body.Email,
 		"token": tokenString,
+	})
+}
+
+// func Validate(c *gin.Context) {
+// 	user, _ := c.Get("user").(models.User)
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"message": user,
+// 	})
+// }
+
+func Validate(c *gin.Context) {
+	user, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": user,
 	})
 }

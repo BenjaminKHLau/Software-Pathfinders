@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/benjaminkhlau/go-crud/controllers"
 	"github.com/benjaminkhlau/go-crud/initializers"
+	"github.com/benjaminkhlau/go-crud/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,7 @@ func main() {
 	// r.GET("/", controllers.PostsCreate)
 	r.POST("/login", controllers.Login)
 	r.POST("/signup", controllers.SignUp)
+	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 	r.POST("/posts", controllers.PostsCreate)
 	r.GET("/posts", controllers.PostsIndex)
 	r.PUT("/posts/:id", controllers.PostsUpdate)
