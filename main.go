@@ -18,6 +18,8 @@ func main() {
 	r.POST("/login", controllers.Login)
 	r.POST("/signup", controllers.SignUp)
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
+	r.PUT("/admin", middleware.RequireAuth, controllers.SetAdmin)
+	r.PUT("/admin/:id", middleware.RequireAuth, controllers.SetAdminStatus)
 	r.POST("/posts", controllers.PostsCreate)
 	r.GET("/posts", controllers.PostsIndex)
 	r.PUT("/posts/:id", controllers.PostsUpdate)

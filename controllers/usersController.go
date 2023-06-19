@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/benjaminkhlau/go-crud/initializers"
@@ -18,8 +20,11 @@ var jwtSecret = []byte(os.Getenv("SECRET_KEY"))
 func SignUp(c *gin.Context) {
 	// Get email/pw off req body
 	var body struct {
-		Email    string
-		Password string
+		Email     string
+		Password  string
+		FirstName string
+		LastName  string
+		Phone     string
 	}
 
 	if c.Bind(&body) != nil {
@@ -37,7 +42,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 	// Create the user
-	user := models.User{Email: body.Email, Password: string(hash)}
+	user := models.User{Email: body.Email, Password: string(hash), FirstName: body.FirstName, LastName: body.LastName, Phone: body.Phone}
 	result := initializers.DB.Create(&user)
 
 	if result.Error != nil {
@@ -65,8 +70,11 @@ func SignUp(c *gin.Context) {
 
 	// Respond
 	c.JSON(http.StatusOK, gin.H{
-		"email": body.Email,
-		"token": tokenString,
+		"email":     body.Email,
+		"firstname": body.FirstName,
+		"lastname":  body.LastName,
+		"phone":     body.Phone,
+		"token":     tokenString,
 		// "password": hash,
 	})
 }
@@ -129,13 +137,6 @@ func Login(c *gin.Context) {
 	})
 }
 
-// func Validate(c *gin.Context) {
-// 	user, _ := c.Get("user").(models.User)
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"message": user,
-// 	})
-// }
-
 func Validate(c *gin.Context) {
 	user, exists := c.Get("user")
 	if !exists {
@@ -148,4 +149,73 @@ func Validate(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": user,
 	})
+}
+
+func SetAdminStatus(c *gin.Context) {
+	// Check if the user is authenticated
+	user, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+	// Check if the user has admin authorization
+	if user.(models.User).Admin {
+		// Get the user ID from the request parameters or body
+		userID := c.Param("id")
+		// Find the user in the database based on the ID
+		var user models.User
+		result := initializers.DB.Where("id = ?", userID).First(&user)
+		if result.Error != nil {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": "User not found",
+			})
+			return
+		}
+
+		// Set the user's admin status
+		user.Admin = !user.Admin
+
+		// Save the updated user in the database
+		result = initializers.DB.Save(&user)
+		if result.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Failed to set admin status",
+			})
+			return
+		}
+
+		// Respond with success message
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Admin status updated to " + strconv.FormatBool(user.Admin) + " for user ID " + userID,
+		})
+		return
+	}
+
+	// If the user is not authorized as an admin
+	c.JSON(http.StatusForbidden, gin.H{
+		"error": "User does not have admin authorization",
+	})
+}
+
+func SetAdmin(c *gin.Context) {
+	fmt.Println(c.Get("user"))
+	var user models.User
+	result := initializers.DB.Where("id = ?", 1).First(&user)
+	if result.Error != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Invalid User",
+		})
+		return
+	}
+	if user.ID == 1 {
+		user.Admin = true
+		if err := initializers.DB.Save(&user).Error; err != nil {
+			// Handle error
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err,
+			})
+		}
+	}
 }
