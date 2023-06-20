@@ -26,7 +26,11 @@ func PostsCreate(c *gin.Context) {
 	}
 
 	c.Bind(&body)
-	post := models.Post{Title: body.Title, Body: body.Body, AuthorID: person, PathID: body.PathID}
+
+	// Find Path
+	var path models.Path
+	initializers.DB.Where("ID = ?", body.PathID).First(&path)
+	post := models.Post{Title: body.Title, Body: body.Body, AuthorID: person, PathID: body.PathID, Author: user.(models.User), Paths: path}
 	result := initializers.DB.Create(&post)
 
 	if result.Error != nil {
