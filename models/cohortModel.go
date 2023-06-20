@@ -9,7 +9,8 @@ import (
 type Cohort struct {
 	gorm.Model
 	StartDate time.Time
-	UserID    []int
-	PathID    int
-	Path      Path `gorm:"foreignKey:PathID"`
+	// UserID    []int
+	PathID uint
+	Path   Path `gorm:"foreignKey:PathID"`
+	// CohortID uint
 }

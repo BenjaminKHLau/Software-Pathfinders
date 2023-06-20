@@ -6,6 +6,7 @@ type Path struct {
 	gorm.Model
 	PathName        string
 	PathDescription string
-	Posts           []Post
-	Cohorts         []Cohort
+	Posts           []Post   `gorm:"foreignKey:PathID"`
+	Cohorts         []Cohort `gorm:"foreignKey:PathID"`
+	// CohortID        uint
 }

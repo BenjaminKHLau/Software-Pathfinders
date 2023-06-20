@@ -1,16 +1,29 @@
 package controllers
 
 import (
+	"fmt"
+	"net/http"
+
 	"github.com/benjaminkhlau/go-crud/initializers"
 	"github.com/benjaminkhlau/go-crud/models"
 	"github.com/gin-gonic/gin"
 )
 
 func PostsCreate(c *gin.Context) {
+	user, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+	fmt.Println(user)
 	// Get data off req body
 	var body struct {
-		Body  string
-		Title string
+		Title    string
+		Body     string
+		AuthorID uint
+		PathID   uint
 	}
 	c.Bind(&body)
 	post := models.Post{Title: body.Title, Body: body.Body}
