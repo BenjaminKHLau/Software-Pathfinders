@@ -23,7 +23,7 @@ func main() {
 	r.PUT("/admin/:id", middleware.RequireAuth, controllers.SetAdminStatus)
 
 	// Post Content routes
-	r.POST("/posts", controllers.PostsCreate)
+	r.POST("/posts", middleware.RequireAuth, controllers.PostsCreate)
 	r.GET("/posts", controllers.PostsIndex)
 	r.PUT("/posts/:id", controllers.PostsUpdate)
 	r.DELETE("/posts/:id", controllers.PostsDelete)
@@ -32,7 +32,7 @@ func main() {
 	// CRUD routes for Path
 	r.GET("/paths", controllers.PathsAll)
 	r.GET("/paths/:id", controllers.PathsShow)
-	r.POST("/paths", controllers.PathsCreate)
+	r.POST("/paths", middleware.RequireAuth, controllers.PathsCreate)
 	r.PUT("/paths/:id", controllers.PathsUpdate)
 	r.DELETE("/paths/:id", controllers.PathsDelete)
 

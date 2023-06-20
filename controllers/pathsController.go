@@ -1,14 +1,32 @@
 package controllers
 
 import (
+	"fmt"
+	"net/http"
+
 	"github.com/benjaminkhlau/go-crud/initializers"
 	"github.com/benjaminkhlau/go-crud/models"
 	"github.com/gin-gonic/gin"
 )
 
 func PathsCreate(c *gin.Context) {
-	var path models.Path
-	c.BindJSON(&path)
+	user, exists := c.Get("user")
+	person := user.(models.User).ID
+	fmt.Println("HELLOOOOOO ", person)
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	var body struct {
+		PathName        string
+		PathDescription string
+	}
+
+	c.Bind(&body)
+	path := models.Path{PathName: body.PathName, PathDescription: body.PathDescription}
 	result := initializers.DB.Create(&path)
 
 	if result.Error != nil {
