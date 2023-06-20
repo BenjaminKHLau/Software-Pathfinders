@@ -8,4 +8,6 @@ type Post struct {
 	Body     string
 	Author   User `gorm:"foreignKey:AuthorID"`
 	AuthorID uint
+	Paths    Path `gorm:"foreignKey:PathID"`
+	PathID   uint
 }

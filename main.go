@@ -14,12 +14,15 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	// r.GET("/", controllers.PostsCreate)
+
+	// Admin and authentication routes
 	r.POST("/login", controllers.Login)
 	r.POST("/signup", controllers.SignUp)
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
 	r.PUT("/admin", middleware.RequireAuth, controllers.SetAdmin)
 	r.PUT("/admin/:id", middleware.RequireAuth, controllers.SetAdminStatus)
+
+	// Content routes
 	r.POST("/posts", controllers.PostsCreate)
 	r.GET("/posts", controllers.PostsIndex)
 	r.PUT("/posts/:id", controllers.PostsUpdate)
