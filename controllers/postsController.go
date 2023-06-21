@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -30,9 +31,9 @@ func PostsCreate(c *gin.Context) {
 
 	// Find Path and pathID
 	var path models.Path
-	pathID, _ := strconv.ParseUint(c.Param("pathID"), 10, 32)
+	pathID, _ := strconv.Atoi(c.Param("pathID"))
 	initializers.DB.Where("ID = ?", pathID).First(&path)
-	post := models.Post{Title: body.Title, Body: body.Body, AuthorID: person, PathID: uint(pathID), Author: user.(models.User), Paths: path}
+	post := models.Post{Title: body.Title, Body: body.Body, UserID: person, PathID: uint(pathID)} //Author: user.(models.User), Paths: path}
 	result := initializers.DB.Create(&post)
 
 	if result.Error != nil {
@@ -65,21 +66,18 @@ func PostsUpdate(c *gin.Context) {
 	// Get the id off the url
 	id := c.Param("id")
 
-	// Get the data off req body
 	var body struct {
 		Body  string
 		Title string
 	}
 	c.Bind(&body)
+
 	// Find the post we're updating
 	var post models.Post
 	initializers.DB.First(&post, id)
 
 	// Update it
-	initializers.DB.Model(&post).Updates(models.Post{
-		Title: body.Title,
-		Body:  body.Body,
-	})
+	initializers.DB.Model(&post).Updates(models.Post{Title: body.Title, Body: body.Body})
 
 	c.JSON(200, gin.H{
 		"post": post,
@@ -88,6 +86,26 @@ func PostsUpdate(c *gin.Context) {
 
 func PostsDelete(c *gin.Context) {
 	id := c.Param("id")
+	var post models.Post
+	initializers.DB.First(&post, id)
+	user, exists := c.Get("user")
+	// person := user.(models.User).ID
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+	fmt.Println("CHECK HERE ~~~~~~~~~~~~~", post.UserID)
+	fmt.Println(user.(models.User).ID)
+	if post.UserID != user.(models.User).ID {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "This is not your post",
+		})
+		return
+	}
 	initializers.DB.Delete(&models.Post{}, id)
-	c.Status(200)
+	c.JSON(200, gin.H{
+		"message": "Post ID " + id + " deleted successfully",
+	})
 }

@@ -9,6 +9,9 @@ type User struct {
 	FirstName string `gorm:"not null"`
 	LastName  string `gorm:"not null"`
 	Phone     string `gorm:"unique"`
-	Posts     []Post `gorm:"foreignKey:AuthorID"`
+	Posts     []Post //`gorm:"foreignKey:AuthorID"`
 	Admin     bool
 }
+
+// Cohort    Cohort
+// CohortID  int

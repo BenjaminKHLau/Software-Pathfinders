@@ -16,8 +16,6 @@ func ConnectToDB() {
 	godotenv.Load(".env")
 	dsn := os.Getenv("DB_URL")
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	// fmt.Println("IS MY DB BROKEN??", DB)
-	// fmt.Println("CHECKING DSN VAR", dsn)
 	if err != nil {
 		log.Fatal("Failed to connect to database")
 	}

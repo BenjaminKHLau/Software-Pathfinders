@@ -25,15 +25,15 @@ func main() {
 	// Post Content routes
 	r.POST("/paths/:pathID/posts", middleware.RequireAuth, controllers.PostsCreate)
 	r.GET("/posts", controllers.PostsIndex)
-	r.PUT("/posts/:id", controllers.PostsUpdate)
-	r.DELETE("/posts/:id", controllers.PostsDelete)
+	r.PUT("/posts/:id", middleware.RequireAuth, controllers.PostsUpdate)
+	r.DELETE("/posts/:id", middleware.RequireAuth, controllers.PostsDelete)
 	r.GET("/posts/:id", controllers.PostsShow)
 
 	// CRUD routes for Path
 	r.GET("/paths", controllers.PathsAll)
 	r.GET("/paths/:id", controllers.PathsShow)
 	r.POST("/paths", middleware.RequireAuth, controllers.PathsCreate)
-	r.PUT("/paths/:id", controllers.PathsUpdate)
+	r.PUT("/paths/:pathID", middleware.RequireAuth, controllers.PathsUpdate)
 	r.DELETE("/paths/:id", controllers.PathsDelete)
 
 	r.Run() // listen and serve on 0.0.0.0:8080
