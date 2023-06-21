@@ -46,7 +46,7 @@ func PathsAll(c *gin.Context) {
 	})
 }
 
-func PathsShow(c *gin.Context) {
+func PathsSingle(c *gin.Context) {
 	id := c.Param("id")
 	var path models.Path
 	initializers.DB.First(&path, id)
@@ -71,6 +71,24 @@ func PathsUpdate(c *gin.Context) {
 
 func PathsDelete(c *gin.Context) {
 	id := c.Param("id")
+
+	user, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+
+	if !user.(models.User).Admin {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "You do not have permission",
+		})
+		return
+	}
+
 	initializers.DB.Delete(&models.Path{}, id)
-	c.Status(200)
+	c.JSON(200, gin.H{
+		"message": "successfully deleted",
+	})
 }

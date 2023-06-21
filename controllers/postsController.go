@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -45,15 +44,15 @@ func PostsCreate(c *gin.Context) {
 	})
 }
 
-func PostsIndex(c *gin.Context) {
+func PostsAll(c *gin.Context) {
 	var posts []models.Post
 	initializers.DB.Find(&posts)
 	c.JSON(200, gin.H{
-		"things": posts,
+		"all_posts": posts,
 	})
 }
 
-func PostsShow(c *gin.Context) {
+func PostsSingle(c *gin.Context) {
 	id := c.Param("id")
 	var post models.Post
 	initializers.DB.First(&post, id)
@@ -89,15 +88,14 @@ func PostsDelete(c *gin.Context) {
 	var post models.Post
 	initializers.DB.First(&post, id)
 	user, exists := c.Get("user")
-	// person := user.(models.User).ID
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "User not found",
 		})
 		return
 	}
-	fmt.Println("CHECK HERE ~~~~~~~~~~~~~", post.UserID)
-	fmt.Println(user.(models.User).ID)
+	// fmt.Println("CHECK HERE ~~~~~~~~~~~~~", post.UserID)
+	// fmt.Println(user.(models.User).ID)
 	if post.UserID != user.(models.User).ID {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "This is not your post",

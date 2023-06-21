@@ -10,8 +10,5 @@ type Cohort struct {
 	gorm.Model
 	StartDate time.Time
 	PathID    uint
-	Path      Path //`gorm:"foreignKey:PathID"`
-	// Users     []User
+	Path      Path // Belongs to Path
 }
-
-// CohortID uint
