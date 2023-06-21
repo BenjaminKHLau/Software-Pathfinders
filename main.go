@@ -23,7 +23,7 @@ func main() {
 	r.PUT("/admin/:id", middleware.RequireAuth, controllers.SetAdminStatus)
 
 	// Post Content routes
-	r.POST("/posts", middleware.RequireAuth, controllers.PostsCreate)
+	r.POST("/paths/:pathID/posts", middleware.RequireAuth, controllers.PostsCreate)
 	r.GET("/posts", controllers.PostsIndex)
 	r.PUT("/posts/:id", controllers.PostsUpdate)
 	r.DELETE("/posts/:id", controllers.PostsDelete)

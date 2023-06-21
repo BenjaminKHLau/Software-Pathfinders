@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/benjaminkhlau/go-crud/initializers"
 	"github.com/benjaminkhlau/go-crud/models"
@@ -27,10 +28,11 @@ func PostsCreate(c *gin.Context) {
 
 	c.Bind(&body)
 
-	// Find Path
+	// Find Path and pathID
 	var path models.Path
-	initializers.DB.Where("ID = ?", body.PathID).First(&path)
-	post := models.Post{Title: body.Title, Body: body.Body, AuthorID: person, PathID: body.PathID, Author: user.(models.User), Paths: path}
+	pathID, _ := strconv.ParseUint(c.Param("pathID"), 10, 32)
+	initializers.DB.Where("ID = ?", pathID).First(&path)
+	post := models.Post{Title: body.Title, Body: body.Body, AuthorID: person, PathID: uint(pathID), Author: user.(models.User), Paths: path}
 	result := initializers.DB.Create(&post)
 
 	if result.Error != nil {
