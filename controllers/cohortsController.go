@@ -43,6 +43,38 @@ func CohortCreate(c *gin.Context) {
 
 }
 
+func CohortUpdate(c *gin.Context) {
+	pathID, _ := strconv.Atoi(c.Param("pathID"))
+	var body struct {
+		StartDate string
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Convert string to Time datatype
+	date, err := time.Parse("2006-01-02", body.StartDate)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Date needs to be in YYYY-MM-DD format"})
+		return
+	}
+
+	var cohort models.Cohort
+	if err := initializers.DB.First(&cohort, pathID).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Cohort not found"})
+		return
+	}
+
+	cohort.StartDate = date
+	if err := initializers.DB.Save(&cohort).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update cohort"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"cohort": cohort})
+}
+
 func CohortUsers(c *gin.Context) {
 	cohortID := c.Param("cohortID")
 
@@ -128,4 +160,14 @@ func RemoveUserFromCohort(c *gin.Context) {
 	initializers.DB.Model(&cohort).Association("Users").Delete(&user)
 
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("User %d removed from cohort %d", userID, cohortID)})
+}
+
+func CohortDelete(c *gin.Context) {
+	cohortID := c.Param("cohortID")
+	var cohort models.Cohort
+	initializers.DB.First(&cohort, cohortID)
+	initializers.DB.Delete(&models.Cohort{}, cohortID)
+	c.JSON(200, gin.H{
+		"message": "Cohort ID " + cohortID + " deleted successfully",
+	})
 }

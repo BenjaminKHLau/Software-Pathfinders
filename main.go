@@ -42,10 +42,11 @@ func main() {
 	// CRUD routes for Cohort
 	// Make a Path before creating a Cohort
 	r.POST("/paths/:pathID/cohorts", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortCreate)
+	r.PUT("/paths/:pathID/cohorts", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortUpdate)
 	r.GET("/cohorts/:cohortID/users", controllers.CohortUsers)
 	r.GET("/cohorts", controllers.CohortsAll)
 	r.POST("/cohorts/:cohortID/users/:userID", middleware.RequireAuth, middleware.AdminAccess, controllers.AddUserToCohort)
 	r.DELETE("/cohorts/:cohortID/users/:userID", middleware.RequireAuth, middleware.AdminAccess, controllers.RemoveUserFromCohort)
-
+	r.DELETE("/cohorts/:cohortID", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortDelete)
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
