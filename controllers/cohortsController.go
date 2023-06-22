@@ -70,3 +70,77 @@ func CohortUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"students": cohort.Users})
 }
+
+func CohortsAll(c *gin.Context) {
+	var cohorts []models.Cohort
+	initializers.DB.Find(&cohorts)
+	c.JSON(200, gin.H{
+		"all_cohorts": cohorts,
+	})
+}
+
+func AddUserToCohort(c *gin.Context) {
+	cohortIDStr := c.Param("cohortID")
+	userIDStr := c.Param("userID")
+
+	cohortID, err := strconv.ParseUint(cohortIDStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid cohort ID"})
+		return
+	}
+
+	userID, err := strconv.ParseUint(userIDStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	var cohort models.Cohort
+	if err := initializers.DB.First(&cohort, cohortID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user models.User
+	if err := initializers.DB.First(&user, userID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	initializers.DB.Model(&cohort).Association("Users").Append(&user)
+
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("User %d added to cohort %d", userID, cohortID)})
+}
+
+func RemoveUserFromCohort(c *gin.Context) {
+	cohortIDStr := c.Param("cohortID")
+	userIDStr := c.Param("userID")
+
+	cohortID, err := strconv.ParseUint(cohortIDStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid cohort ID"})
+		return
+	}
+
+	userID, err := strconv.ParseUint(userIDStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	var cohort models.Cohort
+	if err := initializers.DB.Preload("Users").First(&cohort, cohortID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user models.User
+	if err := initializers.DB.First(&user, userID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	initializers.DB.Model(&cohort).Association("Users").Delete(&user)
+
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("User %d removed from cohort %d", userID, cohortID)})
+}
