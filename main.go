@@ -24,10 +24,10 @@ func main() {
 
 	// Post Content routes
 	// Must have Path to create Post
-	r.POST("/paths/:pathID/posts", middleware.RequireAuth, controllers.PostsCreate)
+	r.POST("/paths/:pathID/posts", middleware.RequireAuth, middleware.AdminAccess, controllers.PostsCreate)
 	r.GET("/posts", controllers.PostsAll)
-	r.PUT("/posts/:id", middleware.RequireAuth, controllers.PostsUpdate)
-	r.DELETE("/posts/:id", middleware.RequireAuth, controllers.PostsDelete)
+	r.PUT("/posts/:id", middleware.RequireAuth, middleware.AdminAccess, controllers.PostsUpdate)
+	r.DELETE("/posts/:id", middleware.RequireAuth, middleware.AdminAccess, controllers.PostsDelete)
 	r.GET("/posts/:id", controllers.PostsSingle)
 	r.GET("/user", middleware.RequireAuth, controllers.PostsOfUser)
 
@@ -35,17 +35,17 @@ func main() {
 	// Make a Path before creating a Post
 	r.GET("/paths", controllers.PathsAll)
 	r.GET("/paths/:id", controllers.PathsSingle)
-	r.POST("/paths", middleware.RequireAuth, controllers.PathsCreate)
-	r.PUT("/paths/:pathID", middleware.RequireAuth, controllers.PathsUpdate)
-	r.DELETE("/paths/:id", middleware.RequireAuth, controllers.PathsDelete)
+	r.POST("/paths", middleware.RequireAuth, middleware.AdminAccess, controllers.PathsCreate)
+	r.PUT("/paths/:pathID", middleware.RequireAuth, middleware.AdminAccess, controllers.PathsUpdate)
+	r.DELETE("/paths/:id", middleware.RequireAuth, middleware.AdminAccess, controllers.PathsDelete)
 
 	// CRUD routes for Cohort
 	// Make a Path before creating a Cohort
-	r.POST("/paths/:pathID/cohorts", middleware.RequireAuth, controllers.CohortCreate)
+	r.POST("/paths/:pathID/cohorts", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortCreate)
 	r.GET("/cohorts/:cohortID/users", controllers.CohortUsers)
 	r.GET("/cohorts", controllers.CohortsAll)
-	r.POST("/cohorts/:cohortID/users/:userID", middleware.RequireAuth, controllers.AddUserToCohort)
-	r.DELETE("/cohorts/:cohortID/users/:userID", middleware.RequireAuth, controllers.RemoveUserFromCohort)
+	r.POST("/cohorts/:cohortID/users/:userID", middleware.RequireAuth, middleware.AdminAccess, controllers.AddUserToCohort)
+	r.DELETE("/cohorts/:cohortID/users/:userID", middleware.RequireAuth, middleware.AdminAccess, controllers.RemoveUserFromCohort)
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

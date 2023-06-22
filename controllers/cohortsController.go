@@ -13,21 +13,6 @@ import (
 
 func CohortCreate(c *gin.Context) {
 	pathID, _ := strconv.Atoi(c.Param("pathID"))
-	user, exists := c.Get("user")
-	admin := user.(models.User).Admin
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "User not found",
-		})
-		return
-	}
-	if !admin {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Insufficient permissions. Need Admin permissions to continue",
-		})
-		return
-	}
-
 	var body struct {
 		StartDate string
 	}
