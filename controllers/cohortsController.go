@@ -57,3 +57,16 @@ func CohortCreate(c *gin.Context) {
 	})
 
 }
+
+func CohortUsers(c *gin.Context) {
+	cohortID := c.Param("cohortID")
+
+	var cohort models.Cohort
+	if err := initializers.DB.Preload("Users").First(&cohort, cohortID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"students": cohort.Users})
+}
