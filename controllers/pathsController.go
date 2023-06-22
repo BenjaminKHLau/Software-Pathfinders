@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/benjaminkhlau/go-crud/initializers"
@@ -11,11 +10,16 @@ import (
 
 func PathsCreate(c *gin.Context) {
 	user, exists := c.Get("user")
-	person := user.(models.User).ID
-	fmt.Println("HELLOOOOOO ", person)
+	person := user.(models.User).Admin
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "User not found",
+		})
+		return
+	}
+	if !person {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Insufficient permissions. Need Admin permissions to continue",
 		})
 		return
 	}

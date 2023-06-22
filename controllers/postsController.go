@@ -29,9 +29,9 @@ func PostsCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Find Path and pathID
-	var path models.Path
+	// var path models.Path
 	pathID, _ := strconv.Atoi(c.Param("pathID"))
-	initializers.DB.Where("ID = ?", pathID).First(&path)
+	// initializers.DB.Where("ID = ?", pathID).First(&path)
 	post := models.Post{Title: body.Title, Body: body.Body, UserID: person, PathID: uint(pathID)} //Author: user.(models.User), Paths: path}
 	result := initializers.DB.Create(&post)
 
@@ -58,6 +58,23 @@ func PostsSingle(c *gin.Context) {
 	initializers.DB.First(&post, id)
 	c.JSON(200, gin.H{
 		"post": post,
+	})
+}
+
+func PostsOfUser(c *gin.Context) {
+	user, exists := c.Get("user")
+	person := user.(models.User).Email
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "User not found",
+		})
+		return
+	}
+	thisVarHoldsUserPosts := models.User{}
+	userQuery := models.User{Email: person}
+	initializers.DB.Model(models.User{}).Preload("Posts").Where(&userQuery).Find(&thisVarHoldsUserPosts)
+	c.JSON(200, gin.H{
+		"posts": thisVarHoldsUserPosts,
 	})
 }
 
