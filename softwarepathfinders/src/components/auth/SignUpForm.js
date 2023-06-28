@@ -7,11 +7,11 @@ const SignUpForm = () => {
   const [errors, setErrors] = useState([]);
   const [first_name, setFirst_Name] = useState('');
   const [last_name, setLast_Name] = useState('');
-  // const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-  const user = useSelector(state => state.session.user);
+  // const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
   const [submitted, setSubmitted] = useState(false);
 
@@ -43,7 +43,7 @@ const SignUpForm = () => {
     }
 
     setErrors(errors);
-  }, [first_name, last_name, email, password, repeatPassword]);
+  }, [first_name, last_name, email, password, repeatPassword, phone]);
 
 
 
@@ -53,7 +53,7 @@ const SignUpForm = () => {
 
     if (errors.length > 0) return
     if (password === repeatPassword) {
-      const data = await dispatch(signUp(first_name, last_name, email, password));
+      const data = await dispatch(signUp(first_name, last_name, email, password, phone));
       if (data) {
         setErrors(data)
       }
@@ -83,6 +83,10 @@ const SignUpForm = () => {
 
   const updateRepeatPassword = (e) => {
     setRepeatPassword(e.target.value);
+  };
+
+  const updatePhone = (e) => {
+    setPhone(e.target.value);
   };
 
   // if (user) {
@@ -172,6 +176,18 @@ const SignUpForm = () => {
               placeholder='Confrim Password'
               onChange={updateRepeatPassword}
               value={repeatPassword}
+              required
+            ></input>
+          </div>
+          <div>
+            <label className='form-field-label'>Phone&nbsp;<div className="asterisk">*</div></label>
+            <input
+              className="form-field"
+              type='phone'
+              name='phone'
+              placeholder='phone'
+              onChange={updatePhone}
+              value={phone}
               required
             ></input>
           </div>
