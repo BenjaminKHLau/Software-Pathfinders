@@ -5,12 +5,12 @@ import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
   const [errors, setErrors] = useState([]);
-  const [first_name, setFirst_Name] = useState('');
-  const [last_name, setLast_Name] = useState('');
-  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const [first_name, setFirst_Name] = useState('');
+  const [last_name, setLast_Name] = useState('');
+  const [phone, setPhone] = useState('');
   // const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
   const [submitted, setSubmitted] = useState(false);
@@ -20,15 +20,6 @@ const SignUpForm = () => {
   useEffect(() => {
     let errors = [];
 
-    if (first_name.length < 1 || first_name.length > 20 || first_name.includes(" ")) {
-      errors.push("First name must be between 1 and 20 characters and contain no white space")
-    }
-    if (last_name.length < 1 || last_name.length > 20 || last_name.includes(" ")) {
-      errors.push("Last name must be between 1 and 20 characters and contain no white space")
-    }
-    // if (username.length < 2 || username.length > 20 || username.includes(" ")) {
-    //   errors.push("Username must be between 2 and 20 characters and contain no white space")
-    // }
     if (email.length < 2 || email.length > 50 || email.includes(" ")) {
       errors.push("Email must be between 2 and 50 characters and contain no white space")
     }
@@ -38,12 +29,18 @@ const SignUpForm = () => {
     if (password.length < 6 || password.length > 30 || password.includes(" ")) {
       errors.push('Password must be between 6 and 30 characters and contain no white space');
     }
+    if (first_name.length < 1 || first_name.length > 20 || first_name.includes(" ")) {
+      errors.push("First name must be between 1 and 20 characters and contain no white space")
+    }
+    if (last_name.length < 1 || last_name.length > 20 || last_name.includes(" ")) {
+      errors.push("Last name must be between 1 and 20 characters and contain no white space")
+    }
     if (password !== repeatPassword) {
       errors.push('Passwords must match');
     }
 
     setErrors(errors);
-  }, [first_name, last_name, email, password, repeatPassword, phone]);
+  }, [email, password, repeatPassword, first_name, last_name, phone]);
 
 
 
@@ -53,7 +50,7 @@ const SignUpForm = () => {
 
     if (errors.length > 0) return
     if (password === repeatPassword) {
-      const data = await dispatch(signUp(first_name, last_name, email, password, phone));
+      const data = await dispatch(signUp(email, password, first_name, last_name, phone));
       if (data) {
         setErrors(data)
       }
@@ -61,17 +58,6 @@ const SignUpForm = () => {
   };
 
 
-  const updateFirstname = (e) => {
-    setFirst_Name(e.target.value);
-  };
-
-  const updateLastname = (e) => {
-    setLast_Name(e.target.value);
-  };
-
-  // const updateUsername = (e) => {
-  //   setUsername(e.target.value);
-  // };
 
   const updateEmail = (e) => {
     setEmail(e.target.value);
@@ -81,6 +67,13 @@ const SignUpForm = () => {
     setPassword(e.target.value);
   };
 
+  const updateFirstname = (e) => {
+    setFirst_Name(e.target.value);
+  };
+
+  const updateLastname = (e) => {
+    setLast_Name(e.target.value);
+  };
   const updateRepeatPassword = (e) => {
     setRepeatPassword(e.target.value);
   };
@@ -107,42 +100,6 @@ const SignUpForm = () => {
               </div>
             ))}
           </div>
-          <div>
-            <label className='form-field-label'>First Name&nbsp;<div className="asterisk">*</div></label>
-            <input
-              className="form-field"
-              type='text'
-              name='first_name'
-              placeholder='First Name'
-              onChange={updateFirstname}
-              value={first_name}
-              required
-            ></input>
-          </div>
-          <div>
-            <label className='form-field-label'>Last Name&nbsp;<div className="asterisk">*</div></label>
-            <input
-              className="form-field"
-              type='text'
-              name='last_name'
-              placeholder='Last Name'
-              onChange={updateLastname}
-              value={last_name}
-              required
-            ></input>
-          </div>
-          {/* <div>
-            <label className='form-field-label'>Username&nbsp;<div className="asterisk">*</div></label>
-            <input
-              className="form-field"
-              type='text'
-              name='username'
-              placeholder='Username'
-              onChange={updateUsername}
-              value={username}
-              required
-            ></input>
-          </div> */}
           <div>
             <label className='form-field-label'>Email&nbsp;<div className="asterisk">*</div></label>
             <input
@@ -176,6 +133,30 @@ const SignUpForm = () => {
               placeholder='Confirm Password'
               onChange={updateRepeatPassword}
               value={repeatPassword}
+              required
+            ></input>
+          </div>
+          <div>
+            <label className='form-field-label'>First Name&nbsp;<div className="asterisk">*</div></label>
+            <input
+              className="form-field"
+              type='text'
+              name='first_name'
+              placeholder='First Name'
+              onChange={updateFirstname}
+              value={first_name}
+              required
+            ></input>
+          </div>
+          <div>
+            <label className='form-field-label'>Last Name&nbsp;<div className="asterisk">*</div></label>
+            <input
+              className="form-field"
+              type='text'
+              name='last_name'
+              placeholder='Last Name'
+              onChange={updateLastname}
+              value={last_name}
               required
             ></input>
           </div>
