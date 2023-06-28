@@ -39,17 +39,25 @@ const PathDeleteACTION = (payload) => {
 }
 
 // Thunk Action Creators 
-export const PathGetAllThunk = () => async dispatch => {
-    const response = await fetch(`/api/paths`, {
-        method: "GET"
-    })
-    const data = await response.json();
-    if (response.ok){
-        dispatch(PathGetAllThunk(data))
+export const PathGetAllThunk = () => async (dispatch) => {
+    try {
+      const response = await fetch(`/api/paths`, {
+        method: "GET",
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(PathReadACTION(data));
+        return data;
+      } else {
+        throw new Error("Request failed with status " + response.status);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle the error gracefully, such as dispatching an error action
     }
-
-    return data
-}
+  };
+  
 
 export const PathGetOneThunk = (pathID) => async dispatch => {
     const response = await fetch(`/api/paths/${pathID}`, {
