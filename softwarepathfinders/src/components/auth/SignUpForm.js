@@ -173,7 +173,7 @@ const SignUpForm = () => {
               className="form-field"
               type='password'
               name='repeat_password'
-              placeholder='Confrim Password'
+              placeholder='Confirm Password'
               onChange={updateRepeatPassword}
               value={repeatPassword}
               required
@@ -185,7 +185,7 @@ const SignUpForm = () => {
               className="form-field"
               type='phone'
               name='phone'
-              placeholder='phone'
+              placeholder='Phone'
               onChange={updatePhone}
               value={phone}
               required
