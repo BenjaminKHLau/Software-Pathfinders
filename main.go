@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/benjaminkhlau/go-crud/controllers"
 	"github.com/benjaminkhlau/go-crud/initializers"
 	"github.com/benjaminkhlau/go-crud/middleware"
@@ -15,6 +17,7 @@ func init() {
 func main() {
 	r := gin.Default()
 
+	r.Use(corsMiddleware())
 	// Admin and authentication routes
 	r.POST("/api/login", controllers.Login)
 	r.POST("/api/signup", controllers.SignUp)
@@ -50,4 +53,20 @@ func main() {
 	r.DELETE("/api/cohorts/:cohortID/users/:userID", middleware.RequireAuth, middleware.AdminAccess, controllers.RemoveUserFromCohort)
 	r.DELETE("/api/cohorts/:cohortID", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortDelete)
 	r.Run() // listen and serve on 0.0.0.0:8080
+}
+
+func corsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5000")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Handle preflight requests
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusOK)
+			return
+		}
+
+		c.Next()
+	}
 }
