@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import { Provider } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import SignUpForm from './components/auth/SignUpForm';
+import LoginForm from './components/auth/LoginForm';
 import { authenticate } from './store/session';
 import './App.css';
 // import {store} from './store/store';
@@ -22,6 +23,9 @@ function App() {
       {/* <Provider store={store}> */}
         <Routes>
           <Route path='/signup' element={<SignUpForm />} exact={true} />
+        </Routes>
+        <Routes>
+          <Route path='/login' element={<LoginForm />} exact={true} />
         </Routes>
         <Routes>
           <Route path='/' element={<NavBar />} />
