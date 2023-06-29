@@ -1,13 +1,34 @@
 nav {
     display: flex;
-    width: 100%;
+    justify-content: space-between;
+    width: 100vw;
     height: 60px;
+    background-color: khaki;
+    /* border: 1px solid red; */
 }
 
 .nav-button {
     display: flex;
-    width: fit-content;
-    height: 30px;
+    width: 100px;
+    height: 60px;
     justify-content: center;
     align-items: center;
+    border: none;
+    border-radius: 10px;
+    /* background-color: red; */
+    background-image: linear-gradient(to bottom right, red , yellow);
+    overflow: hidden;
+}
+
+.nav-leftside {
+    display: flex;
+    /* border: 1px solid red; */
+}
+
+.nav-rightside {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    /* border: 1px solid red; */
+    gap: 10px;
 }

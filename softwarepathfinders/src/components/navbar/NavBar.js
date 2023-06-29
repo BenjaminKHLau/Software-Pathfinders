@@ -11,7 +11,7 @@ function NavBar() {
   const dispatch = useDispatch();
   const session = useSelector((state) => state.session);
   const user = session.user ? session.user : null;
-  console.log("USER", user)
+  console.log("USER", user);
 
   useEffect(() => {
     dispatch(PathGetAllThunk())
@@ -27,7 +27,7 @@ function NavBar() {
         </button>
       </section>
       {!user && (
-      <section className="nav-rightside">
+        <section className="nav-rightside">
           <button className="nav-button">
             <Link to="/signup">Sign Up</Link>
           </button>
@@ -36,16 +36,12 @@ function NavBar() {
           </button>
         </section>
       )}
-            {user && (
-      <section className="nav-rightside">
+      {user && (
+        <section className="nav-rightside">
           <button className="nav-button">
-            <Link to="/">PLACEHOLDER 1</Link>
+            <Link to="/">PLACEHOLDER</Link>
           </button>
-          {/* <button className="nav-button"> */}
-            {/* <Link to="/"> */}
-                <Logout />
-                {/* </Link> */}
-          {/* </button> */}
+          <Logout />
         </section>
       )}
     </nav>
