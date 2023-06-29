@@ -1,3 +1,29 @@
+// Get the value of a specific cookie
+const getCookieValue = (name) => {
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return '';
+};
+
+// Set a cookie with a specific value and expiration time
+const setCookie = (name, value, expirationDays) => {
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + expirationDays);
+  const cookie = `${name}=${value};expires=${expirationDate.toUTCString()};path=/`;
+  document.cookie = cookie;
+};
+
+// Delete a cookie by setting its expiration time to a past date
+const deleteCookie = (name) => {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/`;
+};
+
+
 // constants
 const SET_USER = 'session/SET_USER';
 const REMOVE_USER = 'session/REMOVE_USER';
@@ -11,12 +37,16 @@ const removeUser = () => ({
   type: REMOVE_USER,
 })
 
-const initialState = { user: null };
+const initialState = { 
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  // token: getCookieValue('token')
+};
 
 export const authenticate = () => async (dispatch) => {
   const response = await fetch('/api/validate', {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getCookieValue('Authorization')}` // Include the cookie in the request headers
     }
   });
   if (response.ok) {
@@ -45,6 +75,14 @@ export const login = (email, password) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(setUser(data))
+
+    // Save user data to local storage
+    localStorage.setItem('user', JSON.stringify(data));
+    // Save the Authorization cookie to local storage
+    const authorizationCookie = response.headers.get('Set-Cookie');
+    if (authorizationCookie) {
+      setCookie('Authorization', authorizationCookie);
+    }
     return null;
   } else if (response.status < 500) {
     const data = await response.json();
@@ -59,13 +97,19 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   const response = await fetch('/api/logout', {
+    method: "POST",
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getCookieValue('Authorization')}` // Include the cookie in the request headers
     }
   });
 
   if (response.ok) {
     dispatch(removeUser());
+    // Remove user data from local storage
+    localStorage.removeItem('user');
+    // Remove the Authorization cookie
+    deleteCookie('Authorization');
   }
 };
 
@@ -109,3 +153,4 @@ export default function reducer(state = initialState, action) {
       return state;
   }
 }
+
