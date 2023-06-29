@@ -132,7 +132,7 @@ func Login(c *gin.Context) {
 
 	// Respond with the JWT token
 	c.JSON(http.StatusOK, gin.H{
-		"user": user,
+		"profile": user,
 		// "email":  body.Email,
 		"token": tokenString,
 	})
