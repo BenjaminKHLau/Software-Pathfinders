@@ -32,6 +32,10 @@ const LoginForm = () => {
   // if (user) {
   //   return <Navigate to='/' />;
   // }
+  if (user && submitted) {
+    // Redirect to '/' after successful login
+    return <Navigate to='/' />;
+  }
 
   return (
     <div className="form-outer-container">

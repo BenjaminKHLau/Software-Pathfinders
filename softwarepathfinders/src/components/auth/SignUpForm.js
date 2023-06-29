@@ -45,16 +45,35 @@ const SignUpForm = () => {
 
 
   const onSignUp = async (e) => {
-    e.preventDefault();
-    setSubmitted(true);
 
-    if (errors.length > 0) return
-    if (password === repeatPassword) {
-      const data = await dispatch(signUp(email, password, first_name, last_name, phone));
-      if (data) {
-        setErrors(data)
-      }
-    }
+
+    e.preventDefault();
+  setSubmitted(true);
+
+  if (errors.length > 0) return;
+
+  const data = await dispatch(signUp(email, password, first_name, last_name, phone));
+
+  if (data && data.errors) {
+    setErrors(data.errors);
+  } else {
+    // Redirect to login page after successful signup
+    return <Navigate to='/login' />;
+  }
+
+// keep this commented out code for now. I may need it - Will Marett
+    // if (errors.length > 0) return
+    // if (password === repeatPassword) {
+    //   const data = await dispatch(signUp(email, password, first_name, last_name, phone));
+    //   if (data) {
+    //     setErrors(data)
+    //   }
+    //   if (!data.errors) {
+    //     // Redirect to login page after successful signup
+    //     return <Navigate to='/login' />;
+    //   }
+    // }
+
   };
 
 
@@ -81,6 +100,7 @@ const SignUpForm = () => {
   const updatePhone = (e) => {
     setPhone(e.target.value);
   };
+
 
   if (user) {
     return <Navigate to='/login' />;
