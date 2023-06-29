@@ -126,13 +126,14 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	// fmt.Println(os.Getenv("SECRET_KEY"))
+
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
 
 	// Respond with the JWT token
 	c.JSON(http.StatusOK, gin.H{
-		"email": body.Email,
+		"user": user,
+		// "email":  body.Email,
 		"token": tokenString,
 	})
 }
