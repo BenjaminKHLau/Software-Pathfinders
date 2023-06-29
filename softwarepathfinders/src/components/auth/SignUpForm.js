@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-// import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { signUp } from '../../store/session';
 
 const SignUpForm = () => {
@@ -11,7 +11,7 @@ const SignUpForm = () => {
   const [first_name, setFirst_Name] = useState('');
   const [last_name, setLast_Name] = useState('');
   const [phone, setPhone] = useState('');
-  // const user = useSelector(state => state.session.user);
+  const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
   const [submitted, setSubmitted] = useState(false);
 
@@ -82,9 +82,9 @@ const SignUpForm = () => {
     setPhone(e.target.value);
   };
 
-  // if (user) {
-  //   return <Redirect to='/' />;
-  // }
+  if (user) {
+    return <Navigate to='/login' />;
+  }
 
   return (
     <div className="form-outer-container">

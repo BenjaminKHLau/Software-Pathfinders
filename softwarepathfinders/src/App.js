@@ -22,14 +22,13 @@ function App() {
     <BrowserRouter>
       {/* <Provider store={store}> */}
         <Routes>
+          <Route path='/' element={<NavBar />} />
+        </Routes>
+        <Routes>
           <Route path='/signup' element={<SignUpForm />} exact={true} />
         </Routes>
         <Routes>
           <Route path='/login' element={<LoginForm />} exact={true} />
-        </Routes>
-        <Routes>
-          <Route path='/' element={<NavBar />} />
-
         </Routes>
       {/* </Provider> */}
     </BrowserRouter>
