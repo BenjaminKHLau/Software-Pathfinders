@@ -92,7 +92,7 @@ func CohortsAll(c *gin.Context) {
 	var cohorts []models.Cohort
 	initializers.DB.Find(&cohorts)
 	c.JSON(200, gin.H{
-		"all_cohorts": cohorts,
+		"cohorts": cohorts,
 	})
 }
 

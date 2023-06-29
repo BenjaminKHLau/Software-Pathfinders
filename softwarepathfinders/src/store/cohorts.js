@@ -119,7 +119,7 @@ const CohortsReducer = (state = initialState, action) => {
     let newState = {};
     switch(action.type){
         case COHORT_READ: {
-            action.payload.all_cohorts.forEach(cohort => {
+            action.payload.cohorts.forEach(cohort => {
                 newState[cohort.ID] = cohort
             })
             return newState
