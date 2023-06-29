@@ -119,7 +119,9 @@ const PathsReducer = (state = initialState, action) => {
     let newState = {};
     switch(action.type){
         case PATH_READ: {
-            newState = {...action.payload}
+            action.payload.paths.forEach(path => {
+                newState[path.ID] = path
+            })
             return newState
         }
       	case PATH_CREATE: {

@@ -44,7 +44,7 @@ func CohortCreate(c *gin.Context) {
 }
 
 func CohortUpdate(c *gin.Context) {
-	pathID, _ := strconv.Atoi(c.Param("pathID"))
+	cohortID, _ := strconv.Atoi(c.Param("cohortID"))
 	var body struct {
 		StartDate string
 	}
@@ -61,7 +61,7 @@ func CohortUpdate(c *gin.Context) {
 	}
 
 	var cohort models.Cohort
-	if err := initializers.DB.First(&cohort, pathID).Error; err != nil {
+	if err := initializers.DB.First(&cohort, cohortID).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Cohort not found"})
 		return
 	}

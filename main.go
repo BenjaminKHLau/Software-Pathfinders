@@ -55,7 +55,7 @@ func main() {
 	// CRUD routes for Cohort
 	// Make a Path before creating a Cohort
 	r.POST("/api/paths/:pathID/cohorts", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortCreate)
-	r.PUT("/api/paths/:pathID/cohorts", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortUpdate)
+	r.PUT("/api/cohorts/:cohortID", middleware.RequireAuth, middleware.AdminAccess, controllers.CohortUpdate)
 	r.GET("/api/cohorts/:cohortID/users", controllers.CohortUsers)
 	r.GET("/api/cohorts", controllers.CohortsAll)
 	r.POST("/api/cohorts/:cohortID/users/:userID", middleware.RequireAuth, middleware.AdminAccess, controllers.AddUserToCohort)

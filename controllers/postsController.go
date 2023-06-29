@@ -48,7 +48,7 @@ func PostsAll(c *gin.Context) {
 	var posts []models.Post
 	initializers.DB.Find(&posts)
 	c.JSON(200, gin.H{
-		"all_posts": posts,
+		"posts": posts,
 	})
 }
 
