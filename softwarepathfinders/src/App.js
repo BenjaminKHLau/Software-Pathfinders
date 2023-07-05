@@ -8,6 +8,7 @@ import { authenticate } from './store/session';
 import './App.css';
 // import {store} from './store/store';
 import NavBar from './components/navbar/NavBar';
+import Splashpage from './components/splashpage/splashpage';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -23,6 +24,7 @@ function App() {
         <NavBar />
 
         <Routes>
+          <Route path='/' element={<Splashpage />} exact={true} />
           <Route path='/signup' element={<SignUpForm />} exact={true} />
           <Route path='/login' element={<LoginForm />} exact={true} />
         </Routes>
