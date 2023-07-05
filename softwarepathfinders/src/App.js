@@ -24,9 +24,9 @@ function App() {
         <NavBar />
 
         <Routes>
-          <Route path='/' element={<Splashpage />} exact={true} />
           <Route path='/signup' element={<SignUpForm />} exact={true} />
           <Route path='/login' element={<LoginForm />} exact={true} />
+          <Route path='/' element={<Splashpage />} exact={true} />
         </Routes>
 
     </BrowserRouter>
