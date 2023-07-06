@@ -9,7 +9,7 @@ function Splashpage(){
         <section>
         Welcome to Software Pathfinders!
 
-        <div>{user?.profile.Email}</div>
+        <div>Hello, {user?.profile.FirstName}</div>
         </section>
     )
 }
