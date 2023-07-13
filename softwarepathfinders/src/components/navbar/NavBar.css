@@ -4,6 +4,8 @@ nav {
     width: 100vw;
     height: 60px;
     background-color: khaki;
+    overflow: hidden;
+    position: fixed;
     /* border: 1px solid red; */
 }
 
