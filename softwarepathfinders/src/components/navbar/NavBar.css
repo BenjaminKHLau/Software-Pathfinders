@@ -3,7 +3,7 @@ nav {
     justify-content: space-between;
     width: 100vw;
     height: 60px;
-    background-color: khaki;
+    background-color: hsla(54, 77%, 75%, 0.7);
     overflow: hidden;
     position: fixed;
     /* border: 1px solid red; */

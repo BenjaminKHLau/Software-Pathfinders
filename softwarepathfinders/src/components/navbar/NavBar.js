@@ -39,7 +39,10 @@ function NavBar() {
       {user && (
         <section className="nav-rightside">
           <button className="nav-button">
-            <Link to="/">PLACEHOLDER</Link>
+            <Link to="/material">Learn</Link>
+          </button>
+          <button className="nav-button">
+            <Link to="/cohort">Cohort</Link>
           </button>
           <Logout />
         </section>

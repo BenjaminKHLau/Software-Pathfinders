@@ -13,12 +13,35 @@
 .hero-text {
     display: flex;
     text-align: center;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: red;
-    font-size: larger;
+    color: white;
+    font-size: 64px;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
     position: absolute;
+    background: #FFFFFF;
+    background: linear-gradient(to left, #FFFFFF 0%, #FF0000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+}
+
+.hero-text-2 {
+    /* display: flex; */
+    /* text-align: center; */
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 50px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    position: absolute;
+    background: #FFFFFF;
+    background: linear-gradient(to left, #FFFFFF 0%, #FF0000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
 }

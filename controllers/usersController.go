@@ -116,7 +116,7 @@ func Login(c *gin.Context) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["email"] = user.Email
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Set the token expiration time
+	claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix() // Set the token expiration time
 
 	// Sign the token with the secret key
 	tokenString, err := token.SignedString(jwtSecret)
