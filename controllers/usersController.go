@@ -227,3 +227,11 @@ func SetAdmin(c *gin.Context) {
 		}
 	}
 }
+
+func AllUsers(c *gin.Context) {
+	var users []models.User
+	initializers.DB.Find(&users)
+	c.JSON(200, gin.H{
+		"users": users,
+	})
+}

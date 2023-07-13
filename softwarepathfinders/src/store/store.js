@@ -3,6 +3,7 @@ import session from "./session"
 import PathsReducer from "./paths"
 import CohortsReducer from './cohorts';
 import PostsReducer from './posts';
+import AllUsersReducer from './allUsers';
 
 
 export const store = configureStore({
@@ -11,5 +12,6 @@ export const store = configureStore({
     paths: PathsReducer,
     cohorts: CohortsReducer,
     posts: PostsReducer,
+    users: AllUsersReducer,
   },
 });

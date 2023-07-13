@@ -6,6 +6,7 @@ nav {
     background-color: hsla(54, 77%, 75%, 0.7);
     overflow: hidden;
     position: fixed;
+    margin-bottom: 60px;
     /* border: 1px solid red; */
 }
 

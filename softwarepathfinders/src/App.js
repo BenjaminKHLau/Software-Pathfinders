@@ -9,6 +9,7 @@ import './App.css';
 // import {store} from './store/store';
 import NavBar from './components/navbar/NavBar';
 import Splashpage from './components/splashpage/splashpage';
+import AdminPanel from './components/admin/admin';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -24,9 +25,11 @@ function App() {
         <NavBar />
 
         <Routes>
+          <Route path='/admin' element={<AdminPanel />} exact={true} />
           <Route path='/signup' element={<SignUpForm />} exact={true} />
           <Route path='/login' element={<LoginForm />} exact={true} />
           <Route path='/' element={<Splashpage />} exact={true} />
+
         </Routes>
 
     </BrowserRouter>

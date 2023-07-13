@@ -1,0 +1,18 @@
+#admin {
+    display: flex;
+    padding-top: 60px;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 10%; */
+    /* margin-right: 10%; */
+}
+
+#admin table {
+    width: 100%;
+}
+
+#admin th,
+#admin td {
+    padding: 10px;
+    text-align: center;
+}

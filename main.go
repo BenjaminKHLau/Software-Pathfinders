@@ -34,6 +34,7 @@ func main() {
 	r.PUT("/api/admin", middleware.RequireAuth, controllers.SetAdmin)
 	r.PUT("/api/admin/:id", middleware.RequireAuth, controllers.SetAdminStatus)
 	r.POST("/api/logout", controllers.Logout)
+	r.GET("/api/users", middleware.RequireAuth, middleware.AdminAccess, controllers.AllUsers)
 
 	// Post Content routes
 	// Must have Path to create Post

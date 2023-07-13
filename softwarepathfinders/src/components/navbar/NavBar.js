@@ -6,6 +6,7 @@ import { CohortGetAllThunk } from "../../store/cohorts";
 import { PostGetAllThunk } from "../../store/posts";
 import "./NavBar.css";
 import Logout from "../auth/Logout";
+// import { allUsersThunk } from "../../store/allUsers";
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -16,7 +17,8 @@ function NavBar() {
   useEffect(() => {
     dispatch(PathGetAllThunk())
       .then(() => dispatch(CohortGetAllThunk()))
-      .then(() => dispatch(PostGetAllThunk()));
+      .then(() => dispatch(PostGetAllThunk()))
+    //   .then(() => dispatch(allUsersThunk()))
   }, [dispatch]);
 
   return (
@@ -38,6 +40,9 @@ function NavBar() {
       )}
       {user && (
         <section className="nav-rightside">
+          {user.profile.Admin && (<button className="nav-button">
+            <Link to="/admin">Admin</Link>
+          </button>)}
           <button className="nav-button">
             <Link to="/material">Learn</Link>
           </button>
