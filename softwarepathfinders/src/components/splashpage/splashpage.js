@@ -1,4 +1,8 @@
 import { useSelector } from "react-redux"
+import colorful from "../../pics/colorfullaptop.jpg"
+import notes from "../../pics/noteslaptop.jpg"
+import study from "../../pics/studylaptop.jpg"
+import "./splashpage.css"
 
 function Splashpage(){
 
@@ -7,6 +11,7 @@ function Splashpage(){
 
     return(
         <section>
+            <img src={notes} alt="hero" id="hero"/>
         Welcome to Software Pathfinders!
 
         <div>Hello, {user?.profile.FirstName}</div>
