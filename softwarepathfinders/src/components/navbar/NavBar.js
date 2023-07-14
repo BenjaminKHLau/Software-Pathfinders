@@ -12,43 +12,45 @@ function NavBar() {
   const dispatch = useDispatch();
   const session = useSelector((state) => state.session);
   const user = session.user ? session.user : null;
-  console.log("USER", user);
+  //   console.log("USER", user);
 
   useEffect(() => {
     dispatch(PathGetAllThunk())
       .then(() => dispatch(CohortGetAllThunk()))
-      .then(() => dispatch(PostGetAllThunk()))
+      .then(() => dispatch(PostGetAllThunk()));
     //   .then(() => dispatch(allUsersThunk()))
   }, [dispatch]);
 
   return (
     <nav>
       <section className="nav-leftside">
-        <button className="nav-button">
-          <Link to="/">Home</Link>
-        </button>
+        <Link to="/">
+          <button className="nav-button">Home</button>
+        </Link>
       </section>
       {!user && (
         <section className="nav-rightside">
-          <button className="nav-button">
-            <Link to="/signup">Sign Up</Link>
-          </button>
-          <button className="nav-button">
-            <Link to="/login">Log In</Link>
-          </button>
+          <Link to="/signup">
+            <button className="nav-button">Sign Up</button>
+          </Link>
+          <Link to="/login">
+            <button className="nav-button">Log In</button>
+          </Link>
         </section>
       )}
       {user && (
         <section className="nav-rightside">
-          {user.profile.Admin && (<button className="nav-button">
-            <Link to="/admin">Admin</Link>
-          </button>)}
-          <button className="nav-button">
-            <Link to="/material">Learn</Link>
-          </button>
-          <button className="nav-button">
-            <Link to="/cohort">Cohort</Link>
-          </button>
+          {user.profile.Admin && (
+            <Link to="/admin">
+              <button className="nav-button">Admin</button>
+            </Link>
+          )}
+          <Link to="/material">
+            <button className="nav-button">Learn</button>
+          </Link>
+          <Link to="/cohort">
+            <button className="nav-button">Cohort</button>
+          </Link>
           <Logout />
         </section>
       )}

@@ -1,31 +1,26 @@
 import { useEffect, useState } from "react";
-import { allUsersThunk } from "../../store/allUsers";
 import { useDispatch, useSelector } from "react-redux";
-import "./admin.css"
+import { allUsersThunk } from "../../store/allUsers";
+import { changeAdminStatusThunk } from "../../store/allUsers";
+
+import "./admin.css";
 
 function AdminPanel() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
-  const users = useSelector(state => Object.values(state.users))
-//   console.log(users)
+  const users = useSelector((state) => Object.values(state.users.users));
 
   useEffect(() => {
-    dispatch(allUsersThunk())
-    .then(() => setIsLoaded(true));
+    dispatch(allUsersThunk()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
+  const handleChangeAdminStatus = (userID, isAdmin) => {
+    dispatch(changeAdminStatusThunk(userID, isAdmin))
+  };
+
   return (
-  <section id="admin">
-    {/* {users.map(user => (
-        <div className="user-section">
-        <div className="admin-users">{user.ID}</div>
-        <div className="admin-users">{user.Email}</div>
-        <div className="admin-users">{user.FirstName}</div>
-        <div className="admin-users">{user.LastName}</div>
-        <div className="admin-users">{user.Admin.toString()}</div>
-        </div>
-    ))} */}
-    <table>
+    <section id="admin">
+      <table>
         <thead>
           <tr>
             <th>ID</th>
@@ -37,20 +32,27 @@ function AdminPanel() {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {users.map((user) => (
             <tr key={user.ID}>
               <td>{user.ID}</td>
               <td>{user.Email}</td>
               <td>{user.FirstName}</td>
               <td>{user.LastName}</td>
               <td>{user.Phone}</td>
-              <td>{user.Admin.toString()}</td>
+              <td>{user.Admin ? user.Admin.toString() : "false"}</td>
+              <td>
+                <button
+                  onClick={() => handleChangeAdminStatus(user.ID, !user.Admin)}
+                >
+                  {user.Admin ? "Remove Admin" : "Make Admin"}
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </section>
-  
   );
 }
+
 export default AdminPanel;

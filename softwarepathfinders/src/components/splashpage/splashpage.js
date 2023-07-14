@@ -12,8 +12,9 @@ function Splashpage() {
     <section>
       {/* <img src={notes} alt="hero" id="hero"/> */}
       <div id="hero">
-        <div className="hero-text">Welcome to Software Pathfinders!</div>
-        {user && (<div className="hero-text-2">Hello, {user.profile.FirstName}</div>)}
+        <div className="hero-text">Welcome to Software Pathfinders!
+        {user && (<div>Hello, {user.profile.FirstName}</div>)}
+        </div>
       </div>
     </section>
   );
